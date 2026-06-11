@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diego Sant'Anna — Escritor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garant:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --creme:      #F5EDD8;
+    --creme-dark: #EAD9BA;
+    --vinho:      #6B1E35;
+    --vinho-deep: #4A1224;
+    --gold:       #9A6B2E;
+    --ink:        #1A0F0A;
+    --ink-soft:   #3D2018;
+    --muted:      #8B7355;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--creme);
+    color: var(--ink);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0;
+    left: 80px; /* recua para não cobrir a lombada */
+    right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 48px;
+    background: transparent;
+    transition: background .4s, backdrop-filter .4s;
+  }
+  nav.scrolled {
+    background: rgba(245, 237, 216, 0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(107, 30, 53, 0.12);
+  }
+  .nav-logo {
+    font-family: 'Cormorant Garant', serif;
+    font-weight: 700;
+    font-size: 22px;
+    letter-spacing: .04em;
+    color: var(--vinho);
+    text-decoration: none;
+  }
+  .nav-links {
+    display: flex;
+    gap: 36px;
+    list-style: none;
+  }
+  .nav-links a {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    text-decoration: none;
+    transition: color .2s;
+  }
+  .nav-links a:hover { color: var(--vinho); }
+
+  /* ── HERO ── */
+  #inicio {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Lombada — assinatura do design */
+  .spine {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--vinho);
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    transform: rotate(180deg);
+  }
+  .spine-text {
+    font-family: 'Cormorant Garant', serif;
+    font-weight: 300;
+    font-size: 11px;
+    letter-spacing: .3em;
+    text-transform: uppercase;
+    color: rgba(245, 237, 216, .5);
+  }
+
+  .hero-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 120px 80px 80px 64px;
+    position: relative;
+  }
+
+  .hero-eyebrow {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .hero-eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 32px;
+    height: 1px;
+    background: var(--gold);
+  }
+
+  .hero-name {
+    font-family: 'Cormorant Garant', serif;
+    font-weight: 700;
+    font-size: clamp(56px, 8vw, 112px);
+    line-height: .9;
+    color: var(--vinho-deep);
+    margin-bottom: 12px;
+  }
+  .hero-name em {
+    font-style: italic;
+    font-weight: 300;
+    color: var(--vinho);
+  }
+
+  .hero-divider {
+    width: 60px;
+    height: 2px;
+    background: var(--gold);
+    margin: 32px 0;
+  }
+
+  .hero-desc {
+    font-family: 'Cormorant Garant', serif;
+    font-style: italic;
+    font-size: 20px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+    max-width: 480px;
+  }
+
+  .hero-cta {
+    margin-top: 52px;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--vinho);
+    color: var(--creme);
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    padding: 16px 32px;
+    transition: background .2s, transform .2s;
+  }
+  .btn-primary:hover { background: var(--vinho-deep); transform: translateY(-1px); }
+  .btn-secondary {
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    border-bottom: 1px solid var(--muted);
+    padding-bottom: 2px;
+    transition: color .2s, border-color .2s;
+  }
+  .btn-secondary:hover { color: var(--vinho); border-color: var(--vinho); }
+
+  /* Ornamento de fundo */
+  .hero-ornament {
+    position: absolute;
+    right: -40px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: 'Cormorant Garant', serif;
+    font-size: 320px;
+    font-weight: 700;
+    color: rgba(107, 30, 53, .05);
+    line-height: 1;
+    user-select: none;
+    pointer-events: none;
+  }
+
+  /* ── LIVROS ── */
+  #livros {
+    padding: 100px 0;
+    background: var(--vinho-deep);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .section-header {
+    padding: 0 calc(80px + 64px);
+    margin-bottom: 64px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+  .section-eyebrow {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+  .section-title {
+    font-family: 'Cormorant Garant', serif;
+    font-weight: 600;
+    font-size: 48px;
+    line-height: 1;
+    color: var(--creme);
+  }
+
+  /* Carrossel */
+  .carousel-wrapper {
+    position: relative;
+  }
+  .carousel-track-outer {
+    overflow: hidden;
+    padding: 20px 0 40px;
+  }
+  .carousel-track {
+    display: flex;
+    gap: 32px;
+    padding: 0 calc(80px + 64px);
+    transition: transform .5s cubic-bezier(.25, .46, .45, .94);
+  }
+
+  .book-card {
+    flex-shrink: 0;
+    width: 240px;
+    cursor: pointer;
+    text-decoration: none;
+    display: block;
+  }
+  .book-cover-wrap {
+    position: relative;
+    width: 180px;
+    margin: 0 auto 24px;
+  }
+  .book-cover-shadow {
+    position: absolute;
+    bottom: -16px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 140px;
+    height: 24px;
+    background: rgba(0,0,0,.4);
+    filter: blur(12px);
+    border-radius: 50%;
+    transition: width .3s, opacity .3s;
+  }
+  .book-card:hover .book-cover-shadow {
+    width: 160px;
+    opacity: .6;
+  }
+  .book-cover {
+    width: 180px;
+    height: 270px;
+    object-fit: cover;
+    display: block;
+    position: relative;
+    z-index: 1;
+    transition: transform .35s cubic-bezier(.25,.46,.45,.94), box-shadow .35s;
+    box-shadow: 6px 6px 20px rgba(0,0,0,.5);
+  }
+  .book-card:hover .book-cover {
+    transform: translateY(-8px) rotate(-1deg);
+    box-shadow: 12px 20px 40px rgba(0,0,0,.6);
+  }
+
+  /* Placeholder de capa */
+  .book-cover-placeholder {
+    width: 180px;
+    height: 270px;
+    background: linear-gradient(135deg, #3D1428 0%, #6B1E35 50%, #4A1224 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    position: relative;
+    z-index: 1;
+    transition: transform .35s cubic-bezier(.25,.46,.45,.94), box-shadow .35s;
+    box-shadow: 6px 6px 20px rgba(0,0,0,.5);
+  }
+  .book-card:hover .book-cover-placeholder {
+    transform: translateY(-8px) rotate(-1deg);
+    box-shadow: 12px 20px 40px rgba(0,0,0,.6);
+  }
+  .book-cover-placeholder::before {
+    content: '';
+    position: absolute;
+    top: 6px; left: 6px; right: 6px; bottom: 6px;
+    border: 1px solid rgba(184,134,11,.25);
+  }
+  .placeholder-title {
+    font-family: 'Cormorant Garant', serif;
+    font-weight: 600;
+    font-size: 16px;
+    color: var(--creme);
+    text-align: center;
+    line-height: 1.3;
+    margin-bottom: 16px;
+  }
+  .placeholder-author {
+    font-size: 10px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: rgba(245,237,216,.4);
+    text-align: center;
+  }
+
+  .book-info { text-align: center; }
+  .book-title {
+    font-family: 'Cormorant Garant', serif;
+    font-weight: 600;
+    font-size: 18px;
+    color: var(--creme);
+    line-height: 1.2;
+    margin-bottom: 8px;
+  }
+  .book-subtitle {
+    font-size: 11px;
+    color: rgba(245,237,216,.45);
+    letter-spacing: .08em;
+    margin-bottom: 20px;
+  }
+  .btn-comprar {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--gold);
+    text-decoration: none;
+    border: 1px solid rgba(154,107,46,.4);
+    padding: 10px 20px;
+    transition: background .2s, color .2s, border-color .2s;
+  }
+  .btn-comprar:hover {
+    background: var(--gold);
+    color: var(--creme);
+    border-color: var(--gold);
+  }
+
+  /* Controles do carrossel */
+  .carousel-controls {
+    display: flex;
+    gap: 12px;
+    padding: 0 calc(80px + 64px);
+    margin-top: 12px;
+  }
+  .carousel-btn {
+    width: 44px; height: 44px;
+    background: transparent;
+    border: 1px solid rgba(245,237,216,.2);
+    color: var(--creme);
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background .2s, border-color .2s;
+  }
+  .carousel-btn:hover {
+    background: rgba(245,237,216,.08);
+    border-color: rgba(245,237,216,.4);
+  }
+  .carousel-btn:disabled {
+    opacity: .25;
+    cursor: not-allowed;
+  }
+  .carousel-dots {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    margin-left: 8px;
+  }
+  .dot {
+    width: 6px; height: 6px;
+    background: rgba(245,237,216,.2);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background .2s, transform .2s;
+  }
+  .dot.active { background: var(--gold); transform: scale(1.3); }
+
+  /* ── BIO ── */
+  #bio {
+    padding: 100px 0;
+    background: var(--creme);
+  }
+  .bio-inner {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 48px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+  .bio-label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .bio-label::before {
+    content: '';
+    width: 32px; height: 1px;
+    background: var(--gold);
+    display: inline-block;
+  }
+  .bio-heading {
+    font-family: 'Cormorant Garant', serif;
+    font-weight: 600;
+    font-size: 42px;
+    line-height: 1.1;
+    color: var(--vinho-deep);
+    margin-bottom: 28px;
+  }
+  .bio-text {
+    font-size: 15px;
+    line-height: 1.85;
+    color: var(--ink-soft);
+    margin-bottom: 16px;
+  }
+  .bio-text:last-of-type { margin-bottom: 0; }
+
+  /* Coluna visual — foto */
+  .bio-visual {
+    position: relative;
+  }
+  .bio-photo-wrap {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+  }
+  .bio-photo {
+    width: 100%;
+    max-width: 400px;
+    aspect-ratio: 3/4;
+    object-fit: cover;
+    object-position: top center;
+    display: block;
+    filter: grayscale(10%) contrast(1.04);
+  }
+  .bio-photo-wrap::before {
+    content: '';
+    position: absolute;
+    top: 16px;
+    left: -8px;
+    width: 4px;
+    height: 55%;
+    background: var(--gold);
+    z-index: 2;
+  }
+
+  .bio-quote-inline {
+    margin-top: 28px;
+    border-left: 3px solid var(--gold);
+    padding-left: 18px;
+  }
+  .bio-quote-inline p {
+    font-family: 'Cormorant Garant', serif;
+    font-style: italic;
+    font-size: 18px;
+    line-height: 1.55;
+    color: var(--ink-soft);
+  }
+  .bio-quote-inline cite {
+    display: block;
+    margin-top: 10px;
+    font-size: 11px;
+    font-style: normal;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* ── CONTATO ── */
+  #contato {
+    background: var(--ink);
+    padding: 80px 0;
+  }
+  .contato-inner {
+    max-width: 640px;
+    margin: 0 auto;
+    text-align: center;
+    padding: 0 32px;
+  }
+  .contato-title {
+    font-family: 'Cormorant Garant', serif;
+    font-weight: 600;
+    font-size: 42px;
+    color: var(--creme);
+    margin-bottom: 16px;
+  }
+  .contato-sub {
+    font-size: 14px;
+    color: rgba(245,237,216,.45);
+    margin-bottom: 48px;
+    line-height: 1.7;
+  }
+  .social-links {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 48px;
+  }
+  .social-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: rgba(245,237,216,.5);
+    text-decoration: none;
+    border: 1px solid rgba(245,237,216,.12);
+    padding: 12px 20px;
+    transition: color .2s, border-color .2s, background .2s;
+  }
+  .social-link:hover {
+    color: var(--creme);
+    border-color: rgba(154,107,46,.6);
+    background: rgba(154,107,46,.08);
+  }
+  .footer-divider {
+    width: 40px; height: 1px;
+    background: rgba(245,237,216,.1);
+    margin: 0 auto 28px;
+  }
+  .footer-copy {
+    font-size: 11px;
+    color: rgba(245,237,216,.2);
+    letter-spacing: .08em;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    nav { padding: 16px 24px; }
+    .nav-links { gap: 20px; }
+    #inicio { grid-template-columns: 40px 1fr; }
+    .hero-body { padding: 100px 32px 60px 28px; }
+    .hero-ornament { display: none; }
+    .section-header { padding: 0 32px; flex-direction: column; align-items: flex-start; gap: 16px; }
+    .carousel-track { padding: 0 32px; }
+    .carousel-controls { padding: 0 32px; }
+    .bio-inner { grid-template-columns: 1fr; gap: 48px; padding: 0 32px; }
+    .bio-visual { order: -1; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#inicio" class="nav-logo">D. Sant'Anna</a>
+  <ul class="nav-links">
+    <li><a href="#inicio">Início</a></li>
+    <li><a href="#livros">Livros</a></li>
+    <li><a href="#bio">Bio</a></li>
+    <li><a href="#contato">Contato</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="inicio">
+  <div class="spine">
+    <span class="spine-text">Diego Sant'Anna &nbsp;·&nbsp; Escritor</span>
+  </div>
+
+  <div class="hero-body">
+    <div class="hero-eyebrow">Escritor &amp; Poeta</div>
+
+    <h1 class="hero-name">
+      Diego<br><em>Sant'Anna</em>
+    </h1>
+
+    <div class="hero-divider"></div>
+
+    <p class="hero-desc">
+      Poesias que falam sobre amor, ausência, solidão e a beleza das coisas que ficam mesmo depois que tudo passa.
+    </p>
+
+    <div class="hero-cta">
+      <a href="#livros" class="btn-primary">
+        Ver livros
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <a href="#bio" class="btn-secondary">Sobre o autor</a>
+    </div>
+
+    <div class="hero-ornament" aria-hidden="true">D</div>
+  </div>
+</section>
+
+<!-- LIVROS -->
+<section id="livros">
+  <div class="section-header">
+    <div>
+      <div class="section-eyebrow">Obras publicadas</div>
+      <h2 class="section-title">Livros</h2>
+    </div>
+    <div class="carousel-controls" style="padding:0; margin-top: 0;">
+      <button class="carousel-btn" id="prev-btn" aria-label="Anterior" disabled>←</button>
+      <button class="carousel-btn" id="next-btn" aria-label="Próximo">→</button>
+      <div class="carousel-dots" id="dots-container"></div>
+    </div>
+  </div>
+
+  <div class="carousel-wrapper">
+    <div class="carousel-track-outer">
+      <div class="carousel-track" id="carousel-track">
+
+        <!-- Livro 1 -->
+        <a href="https://www.amazon.com.br/dp/B0CP8Y7TMG" target="_blank" rel="noopener" class="book-card">
+          <div class="book-cover-wrap">
+            <div class="book-cover-shadow"></div>
+            <img src="capa-borboletas.png" alt="Não Existem Mais Borboletas" class="book-cover">
+          </div>
+          <div class="book-info">
+            <div class="book-title">Não Existem<br>Mais Borboletas</div>
+            <div class="book-subtitle">eBook · Poesia</div>
+            <span class="btn-comprar">
+              Comprar na Amazon
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
+            </span>
+          </div>
+        </a>
+
+        <!-- Livro 2 — placeholder para futuros livros -->
+        <a href="#" class="book-card" onclick="return false;" style="opacity:.4; cursor:default;">
+          <div class="book-cover-wrap">
+            <div class="book-cover-shadow"></div>
+            <div class="book-cover-placeholder" style="opacity:.5;">
+              <span class="placeholder-title" style="font-size:13px; color:rgba(245,237,216,.4)">Em breve</span>
+            </div>
+          </div>
+          <div class="book-info">
+            <div class="book-title" style="color:rgba(245,237,216,.3)">Próxima obra</div>
+            <div class="book-subtitle">Em breve</div>
+          </div>
+        </a>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BIO -->
+<section id="bio">
+  <div class="bio-inner">
+    <div>
+      <div class="bio-label">O autor</div>
+      <h2 class="bio-heading">Diego<br>Sant'Anna</h2>
+
+      <p class="bio-text">
+        Diego Sant'Anna é escritor e poeta, autor de <em>Não Existem Mais Borboletas</em> — uma obra que percorre o amor em suas formas mais intensas: do início arrebatador à solidão que se instala depois que tudo passa.
+      </p>
+      <p class="bio-text">
+        Seus textos transitam entre a vulnerabilidade e a força, entre corpos e silêncios, oferecendo ao leitor uma visão de mundo única e honesta sobre o que significa amar, perder e encontrar a si mesmo.
+      </p>
+    </div>
+
+    <div class="bio-visual">
+      <div class="bio-photo-wrap">
+        <img
+          src="diego-foto.png"
+          alt="Diego Sant'Anna segurando seu livro Não Existem Mais Borboletas"
+          class="bio-photo"
+        >
+      </div>
+      <div class="bio-quote-inline">
+        <p>"Desde o arrebatador início, em que as juras são longas e os corações têm a mesma rítmica…"</p>
+        <cite>— Não Existem Mais Borboletas</cite>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTATO -->
+<section id="contato">
+  <div class="contato-inner">
+    <h2 class="contato-title">Entre em contato</h2>
+    <p class="contato-sub">
+      Para parcerias, eventos, entrevistas<br>ou apenas para dizer que o livro tocou você.
+    </p>
+
+    <div class="social-links">
+      <a href="https://www.amazon.com.br/dp/B0CP8Y7TMG" target="_blank" rel="noopener" class="social-link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M13.958 10.09c0 1.232.029 2.256-.591 3.351-.502.891-1.301 1.438-2.186 1.438-1.214 0-1.922-.924-1.922-2.292 0-2.692 2.415-3.182 4.7-3.182v.685zm3.186 7.705c-.209.189-.512.201-.745.076-1.052-.872-1.238-1.276-1.814-2.106-1.734 1.767-2.962 2.297-5.209 2.297-2.66 0-4.731-1.642-4.731-4.927 0-2.565 1.391-4.309 3.37-5.164 1.715-.754 4.11-.891 5.942-1.097v-.41c0-.753.06-1.642-.384-2.294-.385-.583-1.124-.823-1.778-.823-1.213 0-2.294.622-2.56 1.91-.054.285-.264.566-.549.58l-3.065-.33c-.259-.058-.547-.266-.472-.66.704-3.716 4.06-4.838 7.066-4.838 1.537 0 3.547.41 4.758 1.574 1.538 1.436 1.392 3.352 1.392 5.438v4.927c0 1.48.616 2.131 1.192 2.928.204.287.25.63-.011.838l-2.403 2.081z"/></svg>
+        Amazon
+      </a>
+      <a href="mailto:contato@diegosantanna.com" class="social-link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        E-mail
+      </a>
+      <a href="https://instagram.com" target="_blank" rel="noopener" class="social-link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+        Instagram
+      </a>
+    </div>
+
+    <div class="footer-divider"></div>
+    <p class="footer-copy">© 2025 Diego Sant'Anna — Todos os direitos reservados</p>
+  </div>
+</section>
+
+<script>
+  /* Nav scroll */
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 40);
+  }, { passive: true });
+
+  /* Carrossel */
+  const track   = document.getElementById('carousel-track');
+  const prevBtn = document.getElementById('prev-btn');
+  const nextBtn = document.getElementById('next-btn');
+  const dotsContainer = document.getElementById('dots-container');
+
+  const cards = track.querySelectorAll('.book-card');
+  const total = cards.length;
+  let current = 0;
+
+  /* Cria dots */
+  cards.forEach((_, i) => {
+    const dot = document.createElement('button');
+    dot.className = 'dot' + (i === 0 ? ' active' : '');
+    dot.setAttribute('aria-label', `Livro ${i + 1}`);
+    dot.addEventListener('click', () => goTo(i));
+    dotsContainer.appendChild(dot);
+  });
+
+  function goTo(idx) {
+    current = Math.max(0, Math.min(idx, total - 1));
+    const cardWidth = cards[0].offsetWidth + 32; // gap
+    track.style.transform = `translateX(-${current * cardWidth}px)`;
+
+    dotsContainer.querySelectorAll('.dot').forEach((d, i) => {
+      d.classList.toggle('active', i === current);
+    });
+    prevBtn.disabled = current === 0;
+    nextBtn.disabled = current === total - 1;
+  }
+
+  prevBtn.addEventListener('click', () => goTo(current - 1));
+  nextBtn.addEventListener('click', () => goTo(current + 1));
+
+  /* Touch swipe */
+  let touchStartX = 0;
+  track.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].clientX; }, { passive: true });
+  track.addEventListener('touchend', e => {
+    const diff = touchStartX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) goTo(diff > 0 ? current + 1 : current - 1);
+  }, { passive: true });
+
+  goTo(0);
+</script>
+</body>
+</html>
