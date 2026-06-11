@@ -577,16 +577,55 @@
 
   /* ── RESPONSIVE ── */
   @media (max-width: 768px) {
-    nav { padding: 16px 24px; }
-    .nav-links { gap: 20px; }
+    nav {
+      left: 40px;
+      padding: 16px 20px;
+    }
+    .nav-links {
+      display: none;
+      position: fixed;
+      top: 0; left: 40px; right: 0; bottom: 0;
+      background: rgba(245, 237, 216, 0.98);
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 36px;
+      z-index: 99;
+    }
+    .nav-links.open { display: flex; }
+    .nav-links a { font-size: 14px; letter-spacing: .18em; }
+    .nav-hamburger {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+      z-index: 101;
+    }
+    .nav-hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--vinho);
+      transition: transform .3s, opacity .3s;
+    }
+    .nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+    .nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
     #inicio { grid-template-columns: 40px 1fr; }
-    .hero-body { padding: 100px 32px 60px 28px; }
+    .hero-body { padding: 100px 24px 60px 20px; }
     .hero-ornament { display: none; }
-    .section-header { padding: 0 32px; flex-direction: column; align-items: flex-start; gap: 16px; }
-    .carousel-track { padding: 0 32px; }
-    .carousel-controls { padding: 0 32px; }
-    .bio-inner { grid-template-columns: 1fr; gap: 48px; padding: 0 32px; }
+    .section-header { padding: 0 24px; flex-direction: column; align-items: flex-start; gap: 16px; }
+    .carousel-track { padding: 0 24px; }
+    .carousel-controls { padding: 0 24px; }
+    .bio-inner { grid-template-columns: 1fr; gap: 48px; padding: 0 24px; }
     .bio-visual { order: -1; }
+  }
+  @media (min-width: 769px) {
+    .nav-hamburger { display: none; }
   }
 </style>
 </head>
@@ -595,7 +634,10 @@
 <!-- NAV -->
 <nav id="navbar">
   <a href="#inicio" class="nav-logo">D. Sant'Anna</a>
-  <ul class="nav-links">
+  <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-links" id="nav-links">
     <li><a href="#inicio">Início</a></li>
     <li><a href="#livros">Livros</a></li>
     <li><a href="#bio">Bio</a></li>
@@ -752,6 +794,20 @@
   window.addEventListener('scroll', () => {
     navbar.classList.toggle('scrolled', window.scrollY > 40);
   }, { passive: true });
+
+  /* Hambúrguer */
+  const hamburger = document.getElementById('hamburger');
+  const navLinks  = document.getElementById('nav-links');
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('open');
+    navLinks.classList.toggle('open');
+  });
+  navLinks.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      hamburger.classList.remove('open');
+      navLinks.classList.remove('open');
+    });
+  });
 
   /* Carrossel */
   const track   = document.getElementById('carousel-track');
